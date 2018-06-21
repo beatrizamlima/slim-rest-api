@@ -3,26 +3,19 @@ use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
 require '../vendor/autoload.php';
-require 'config.php';
+require '../app/Estado.php';
+require '../app/Cidade.php';
 
 $app = new \Slim\App;
 
-$container = $app->getContainer();
+$app->get('/estados', \Estado::class . ':listEstados');
 
-$app->get('/cidades', function (Request $request, Response $response) {
-    $db = new DB();
-    $result = $db->con->find()->toArray();
+$app->post('/estados', \Estado::class . ':addEstado');
 
-    return json_encode($result);
-});
+$app->get('/estados/{id}', \Estado::class . ':showEstado');
 
-$app->post('/cidades', function (Request $request, Response $response) {
-    $document = $request->getParsedBody();
+$app->put('/estados/{id}', \Estado::class . ':editEstado');
 
-    $db = new DB();
-    $db->con->insertMany($document);
-
-    return $response->withHeader('Content-Type', 'application/json')->withStatus(200)->withJson($document, null, JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
-});
+$app->delete('/estados/{id}', \Estado::class . ':deleteEstado');
 
 $app->run();

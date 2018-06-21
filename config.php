@@ -7,7 +7,7 @@ class DB {
     function __construct()
     {
         $mongo = new Mongo('mongodb://localhost:27017');
-        $collection = $mongo->api->dados;
-        $this->con = $collection;
+        $conection = $mongo->api;
+        $this->con = $conection;
     }
 }
