@@ -86,7 +86,7 @@ class Cidade
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200)->withJson($result, null, JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
     }
 
-    public function deleteEstado(Request $request, Response $response)
+    public function deleteCidade(Request $request, Response $response)
     {
         $route = $request->getAttribute('route');
         $id = $route->getArgument('id');

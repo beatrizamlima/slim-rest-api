@@ -1,4 +1,6 @@
 <?php
+use \Firebase\JWT\JWT;
+
 require '../vendor/autoload.php';
 require '../config.php';
 require '../app/Estado.php';
@@ -6,26 +8,41 @@ require '../app/Cidade.php';
 
 $app = new \Slim\App;
 
+$app->add(new Tuupola\Middleware\JwtAuthentication([
+    "path" => "/api",
+    "secret" => "secretpassword"
+]));
+
+$app->get('/token', function (){
+    $token = array (
+        'name' => 'user'
+    );
+
+    $jwt = JWT::encode($token, "secretpassword");
+
+    return $jwt;
+});
+
 //Rotas Estado
-$app->get('/estados', \Estado::class . ':listEstados');
+$app->get('/api/estados', \Estado::class . ':listEstados');
 
-$app->post('/estados', \Estado::class . ':addEstado');
+$app->post('/api/estados', \Estado::class . ':addEstado');
 
-$app->get('/estados/{id}', \Estado::class . ':showEstado');
+$app->get('/api/estados/{id}', \Estado::class . ':showEstado');
 
-$app->put('/estados/{id}', \Estado::class . ':editEstado');
+$app->put('/api/estados/{id}', \Estado::class . ':editEstado');
 
-$app->delete('/estados/{id}', \Estado::class . ':deleteEstado');
+$app->delete('/api/estados/{id}', \Estado::class . ':deleteEstado');
 
 //Rotas Cidade
-$app->get('/cidades', \Cidade::class . ':listCidades');
+$app->get('/api/cidades', \Cidade::class . ':listCidades');
 
-$app->post('/cidades', \Cidade::class . ':addCidade');
+$app->post('/api/cidades', \Cidade::class . ':addCidade');
 
-$app->get('/cidades/{id}', \Cidade::class . ':showCidade');
+$app->get('/api/cidades/{id}', \Cidade::class . ':showCidade');
 
-$app->put('/cidades/{id}', \Cidade::class . ':editCidade');
+$app->put('/api/cidades/{id}', \Cidade::class . ':editCidade');
 
-$app->delete('/cidades/{id}', \Cidade::class . ':deleteCidade');
+$app->delete('/api/cidades/{id}', \Cidade::class . ':deleteCidade');
 
 $app->run();
