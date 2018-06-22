@@ -15,8 +15,12 @@ class Estado
 	}
 
 	public function listEstados(Request $request, Response $response){
-		try {
-	    	$result = $this->collection->find()->toArray();
+        $params = $request->getQueryParams();
+
+        try {
+	    	$result = $this->collection->find($params, [
+                'sort' => ['nome' => 1,'data_criacao' => -1],
+            ])->toArray();
 
 	    	if($result==NULL){
 	    		return "Nenhum estado cadastrado!";

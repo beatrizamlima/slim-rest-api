@@ -1,4 +1,6 @@
 <?php
+use \Psr\Http\Message\ServerRequestInterface as Request;
+use \Psr\Http\Message\ResponseInterface as Response;
 use \Firebase\JWT\JWT;
 
 require '../vendor/autoload.php';
@@ -7,6 +9,11 @@ require '../app/Estado.php';
 require '../app/Cidade.php';
 
 $app = new \Slim\App;
+
+$app->add(function(Request $request, Response $response, $next) {
+    $response = $next($request, $response);
+    return $response->withHeader('Content-Type', 'application/json');
+});
 
 $app->add(new Tuupola\Middleware\JwtAuthentication([
     "path" => "/api",
